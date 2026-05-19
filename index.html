@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>우리반 꽃밭</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 타이틀 -->
+  <img src="images/title.png" class="title">
+
+  <!-- 버튼 영역 -->
+  <div class="top-buttons">
+    <button id="plantBtn">꽃 심기</button>
+    <button id="resetBtn">전체 초기화</button>
+  </div>
+
+  <!-- 꽃밭 -->
+<div id="garden">
+  <img id="gardenBg" src="images/garden.png">
+
+  <div id="flowerLayer"></div>
+</div>
+
+
+  <!-- 꽃 심기 모달 -->
+  <div id="plantModal" class="modal hidden">
+    <div class="modal-box">
+
+      <h2>꽃 심기</h2>
+
+      <input type="text" id="nameInput" placeholder="이름 입력">
+
+      <div class="birthday-row">
+        <input type="number" id="monthInput" placeholder="월">
+        <input type="number" id="dayInput" placeholder="일">
+      </div>
+
+      <div class="modal-buttons">
+        <button id="saveFlowerBtn" class="modal-btn">심기</button>
+<button id="closePlantModal" class="modal-btn">닫기</button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- 꽃 정보 모달 -->
+  <div id="infoModal" class="modal hidden">
+    <div class="modal-box info-box">
+
+      <img id="infoFlowerImage" src="images/flower_default.png" class="info-flower">
+
+      <h2 id="infoName"></h2>
+
+      <p id="infoBirthday"></p>
+      <p id="infoBirthFlower"></p>
+      <p id="infoMeaning"></p>
+
+      <div class="emoji-buttons">
+        <button class="emoji-btn" data-emotion="good">
+          <img src="images/emoji_good.png">
+        </button>
+
+        <button class="emoji-btn" data-emotion="normal">
+          <img src="images/emoji_soso.png">
+        </button>
+
+        <button class="emoji-btn" data-emotion="bad">
+          <img src="images/emoji_bad.png">
+        </button>
+      </div>
+
+      <div class="modal-buttons top-row">
+
+        <button id="sendGreetingBtn" class="modal-btn">
+          친구한테 인사하기
+        </button>
+
+        <button id="openMailboxBtn" class="modal-btn">
+          받은 편지함
+        </button>
+
+      </div>
+
+      <div class="modal-buttons">
+        <button id="closeInfoModal" class="modal-btn">
+          닫기
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 인사말 선택 모달 -->
+<div id="greetingModal" class="modal hidden">
+
+  <div class="modal-box">
+
+    <h2>뭐라고 인사할까?</h2>
+
+    <div class="greeting-list">
+
+      <button class="greeting-option">
+        안녕! 같이 놀자~
+      </button>
+
+      <button class="greeting-option">
+        오늘도 반가워~
+      </button>
+
+      <button class="greeting-option">
+        좋은 하루 보내!
+      </button>
+
+    </div>
+
+      <div class="modal-buttons">
+        <button id="closeGreetingModal" class="modal-btn">
+          닫기
+        </button>
+      </div>
+
+  </div>
+
+</div>
+
+<!-- 편지함 모달 -->
+<div id="mailboxModal" class="modal hidden">
+
+  <div class="modal-box">
+
+    <h2>받은 편지함</h2>
+
+    <div id="mailboxList"></div>
+
+      <div class="modal-buttons">
+        <button id="closeMailboxModal" class="modal-btn">
+          닫기
+        </button>
+      </div>
+
+  </div>
+
+</div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
