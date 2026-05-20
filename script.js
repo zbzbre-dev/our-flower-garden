@@ -22,11 +22,6 @@ const infoMeaning = document.getElementById('infoMeaning');
 
 const emojiButtons = document.querySelectorAll('.emoji-btn');
 
-const gardenRect = garden.getBoundingClientRect();
-
-const gardenWidth = garden.clientWidth;
-const gardenHeight = garden.clientHeight;
-
 const flowerLayer = document.getElementById("flowerLayer");
 
 const openMailboxBtn =
@@ -1549,10 +1544,14 @@ function getRandomPosition() {
   let x, y;
   let valid = false;
 
-  while (!valid) {
+  let attempts = 0;
 
-    x = Math.random() * 80 + 5;
-    y = Math.random() * 50 + 20;
+  while (!valid && attempts < 100) {
+
+    attempts++;
+
+    x = Math.random() * (garden.clientWidth - 120);
+    y = Math.random() * (garden.clientHeight - 120);
 
     valid = true;
 
@@ -1568,6 +1567,11 @@ function getRandomPosition() {
         break;
       }
     }
+  }
+
+  // 자리 못 찾았을 때 fallback
+  if (!valid) {
+    return { x: 0, y: 0 };
   }
 
   return { x, y };
@@ -1614,7 +1618,7 @@ saveFlowerBtn.addEventListener('click', () => {
     day,
     emotion: 'default',
 
-    greeting: [],
+    greetings: [],
     
     x: position.x,
     y: position.y
@@ -1650,8 +1654,6 @@ resetBtn.addEventListener('click', () => {
 // 꽃 렌더링
 function renderFlowers() {
 
-  const now = Date.now();
-
   flowers.forEach(flower => {
 
   if (!flower.greetings) {
@@ -1682,8 +1684,8 @@ function renderFlowers() {
     const flowerDiv = document.createElement('div');
     flowerDiv.className = 'flower';
 
-    flowerDiv.style.left = `${flower.x}%`;
-    flowerDiv.style.bottom = `${flower.y}%`;
+    flowerDiv.style.left = `${flower.x}px`;
+    flowerDiv.style.top = `${flower.y}px`;
 
 
     let imageSrc = 'images/flower_default.png';
@@ -1723,9 +1725,27 @@ function renderFlowers() {
       </div>
     `;
 
+    let isDragging = false;
+
+    let offsetX = 0;
+    let offsetY = 0;
+
+
+    flowerDiv.addEventListener('mousedown', (e) => {
+
+      isDragging = true;
+
+      offsetX = e.offsetX;
+      offsetY = e.offsetY;
+
+      flowerDiv.style.zIndex = 999;
+
+    });
 
     flowerDiv.addEventListener('click', () => {
 
+    if (isDragging) return;
+    
     // 인사 보내는 중
     if (sendingMode) {
 
@@ -1766,6 +1786,64 @@ function renderFlowers() {
 
 
     flowerLayer.appendChild(flowerDiv);
+    document.addEventListener('mousemove', (e) => {
+
+  if (!isDragging) return;
+
+  const gardenRect =
+    garden.getBoundingClientRect();
+
+  let x =
+    e.clientX -
+    gardenRect.left -
+    offsetX;
+
+  let y =
+    e.clientY -
+    gardenRect.top -
+    offsetY;
+
+
+  // 정원 밖 제한
+  const maxX =
+    garden.clientWidth -
+    flowerDiv.clientWidth;
+
+  const maxY =
+    garden.clientHeight -
+    flowerDiv.clientHeight;
+
+
+  x = Math.max(0, Math.min(x, maxX));
+  y = Math.max(0, Math.min(y, maxY));
+
+
+  flowerDiv.style.left = `${x}px`;
+  flowerDiv.style.top = `${y}px`;
+
+
+  // 저장
+  flowers[index].x = x;
+  flowers[index].y = y;
+
+});
+
+
+document.addEventListener('mouseup', () => {
+
+  if (!isDragging) return;
+
+  isDragging = false;
+
+  flowerDiv.style.zIndex = 1;
+
+  saveFlowers();
+
+  setTimeout(() => {
+    isDragging = false;
+  }, 0);
+
+});
   });
 
   saveFlowers();  
